@@ -1,0 +1,4 @@
+Pillow==7.0.0
+pyobjc==6.2
+pandas
+beautifulsoup4
