@@ -7,10 +7,12 @@ import pickle
 
 ap=argparse.ArgumentParser()
 ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
+# the path to the output features index file in .pickle format
 ap.add_argument('-i', '--index', type=str, required=True, help='path to output features index file')
 args=vars(ap.parse_args())
 
 #load the MMIST dataset
+#WE NEEDA CHANGE THIS
 print('[INFO] loading MNIST training split')
 ((trainX, _), (testX, _)) = mnist.load_data()
 
@@ -33,9 +35,11 @@ features = encoder.predict(trainX)
 #construct a dictionary that maps the index of the MNIST training
 #image to its correspinding latent-space representation
 indexies = list(range(0, trainX.shape[0]))
+#indexies = integer indicies of each MNIST digit image in the dataset
+#features = the corresponding feature vetor for each image in the dataset
 data = {'indexies': indexies, 'features': features}
 
-#write the data dictionary to disk
+#write the data dictionary to disk in pickle format
 print('[INFO] saving index.....')
 f = open(args['index'], 'wb')
 f.write(pickle.dumps(data))
