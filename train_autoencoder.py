@@ -56,17 +56,22 @@ BS = 32
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
 
 #load the MNISR dataset
+#(xtrain, ytrain), (xtest, ytest)
+#HERE TO MODIFY AS THE IMAGE DATA
 print('[INFO] loading MNIST dataset')
 ((trainX, _), (testX, _)) = mnist.load_data()
 
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range [0,1]
 trainX = np.expand_dims(trainX, axis=-1)
 testX = np.expand_dims(testX, axis=-1)
+#expand the shape of an array, axis -> position in the epanded axes where the new axis is placed
+#then convert to float32 array
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
 
 #construct our convolutional autoencoder
 print('[INFO] building autoencoder')
+#build(width, height, depth)
 autoencoder = ConvAutoencoder.build(28, 28, 1)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 autoencoder.compile(loss='mse', optimizer=opt)
