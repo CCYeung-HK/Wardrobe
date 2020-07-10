@@ -33,7 +33,9 @@ def perform_search(queryFeatures, index, maxResults=64):
 ap = argparse.ArgumentParser()
 ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
 ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
+#index of features to search through (i.e. the serialized index)
 ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queries to perform')
+#number of testing queries to perfrom with a default of 10
 args=vars(ap.parse_args())
 
 #load the MNIST dataset
@@ -46,7 +48,7 @@ testX = np.expand_dims(testX, axis=-1)
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
 
-#load tje autoencofer model and index from disk
+#load the autoencofer model and index from disk
 print('[INFO] loading autoencoder and index..')
 autoencoder = load_model(args['model'])
 index = pickle.loads(open(args['index'], 'rb').read())
@@ -57,6 +59,8 @@ encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded
 #quantify tje contents of our input testing images using the encoder
 print('[INFO] encoding testing images')
 features = encoder.predict(testX)
+
+
 
 #randomly sample a set of testing query image indexes
 queryIdxs = list(range(0, testX.shape[0]))
