@@ -1,7 +1,5 @@
 #set the matplotlib nbackend so figures can be saved in background
 import matplotlib
-matplotlib.use('Agg')
-
 from pyimagesearch.convautoencoder import ConvAutoencoder
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.datasets import mnist
