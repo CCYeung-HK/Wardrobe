@@ -66,8 +66,10 @@ print('[INFO] loading tops images')
 tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
 tops_image_uint8 = []
 for image in tops:
-    im = np.array(Image.open(image))
-    tops_image_uint8.append(im)
+    im = Image.open(image)
+    im_resized = im.resize((250, 250), Image.ANTIALIAS)
+    im_uint8 = np.array(im_resized)
+    tops_image_uint8.append(im_uint8)
 print(tops_image_uint8[0])
 print(tops_image_uint8[0].dtype)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
