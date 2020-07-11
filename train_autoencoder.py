@@ -14,29 +14,29 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 import os
 
-def visualize_predictions(decoded, gt, samples=10):
-    #initialize our list of output samples
-    outputs = None
+# def visualize_predictions(decoded, gt, samples=10):
+#     #initialize our list of output samples
+#     outputs = None
 
-    #loop over our number of output samples
-    #original vs decoded
-    for i in range(0, samples):
-        original = (gt[i] * 225).astype('uint8')
-        recon = (decoded[i] * 225).astype('uint8')
+#     #loop over our number of output samples
+#     #original vs decoded
+#     for i in range(0, samples):
+#         original = (gt[i] * 225).astype('uint8')
+#         recon = (decoded[i] * 225).astype('uint8')
 
-    #stack the original image and reconstructed image side-by-side
-    output = np.hstack([original, recon])
+#     #stack the original image and reconstructed image side-by-side
+#     output = np.hstack([original, recon])
 
-    #if the outside array is empty, initialise it as the current side-by-side image display
-    if outputs is None:
-        outputs = output
+#     #if the outside array is empty, initialise it as the current side-by-side image display
+#     if outputs is None:
+#         outputs = output
 
-    #otherwise, vertically stack the outputs
-    else:
-        outputs = np.vstack([outputs, output])
+#     #otherwise, vertically stack the outputs
+#     else:
+#         outputs = np.vstack([outputs, output])
 
-    #return the output images
-    return outputs
+#     #return the output images
+#     return outputs
 
 #construct the argument parse and parse the arguments
 #adding commandline arguments
@@ -60,14 +60,13 @@ BS = 32
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
 
 #load the MNISR dataset
-#(xtrain, ytrain), (xtest, ytest)
 #HERE TO MODIFY AS THE IMAGE DATA
 print('[INFO] loading tops images')
 tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
 tops_image_uint8 = []
 for image in tops:
     im = Image.open(image)
-    im_resized = im.resize((250, 250), Image.ANTIALIAS)
+    im_resized = im.resize((252, 252), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
 print(tops_image_uint8[0])
@@ -85,7 +84,7 @@ testX = testX.astype('float32') / 255.0
 #construct our convolutional autoencoder
 print('[INFO] building autoencoder')
 #build(width, height, depth)
-autoencoder = ConvAutoencoder.build(28, 28, 1)
+autoencoder = ConvAutoencoder.build(252, 252, 3)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 autoencoder.compile(loss='mse', optimizer=opt)
 
@@ -100,8 +99,27 @@ H = autoencoder.fit(
 #use the convolutional autoencoder to make predictions on the testing images, construct the visualizationa, and then save it to disk
 print('[INFO] making predictions...')
 decoded = autoencoder.predict(testX)
-vis = visualize_predictions(decoded, testX)
-cv2.imwrite(args['vis'], vis)
+
+n = 10  # how many digits we will display
+plt.figure(figsize=(20, 4))
+for i in range(n):
+    # display original
+    ax = plt.subplot(2, n, i + 1)
+    plt.imshow(testX[i].reshape(252, 252, 3))
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+
+    # display reconstruction
+    ax = plt.subplot(2, n, i + 1 + n)
+    plt.imshow(decoded[i].reshape(252, 252, 3))
+    plt.gray()
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+plt.show()
+
+# vis = visualize_predictions(decoded, testX)
+# cv2.imwrite(args['vis'], vis)
 
 #construct a plot that plots and saves the training history
 N= np.arange(0, EPOCHS)
