@@ -10,6 +10,10 @@ import numpy as np
 import argparse
 import cv2
 
+from PIL import Image
+from sklearn.model_selection import train_test_split
+import os
+
 def visualize_predictions(decoded, gt, samples=10):
     #initialize our list of output samples
     outputs = None
@@ -58,8 +62,15 @@ BS = 32
 #load the MNISR dataset
 #(xtrain, ytrain), (xtest, ytest)
 #HERE TO MODIFY AS THE IMAGE DATA
-print('[INFO] loading MNIST dataset')
-((trainX, _), (testX, _)) = mnist.load_data()
+print('[INFO] loading tops images')
+tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
+tops_image_uint8 = []
+for image in tops:
+    im = np.array(Image.open(image))
+    tops_image_uint8.append(im)
+print(tops_image_uint8[0])
+print(tops_image_uint8[0].dtype)
+trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range [0,1]
 trainX = np.expand_dims(trainX, axis=-1)
