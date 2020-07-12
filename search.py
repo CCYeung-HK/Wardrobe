@@ -56,9 +56,12 @@ for image in tops:
     tops_image_uint8.append(im_uint8)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
+
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
-trainX = np.expand_dims(trainX, axis=-1)
-testX = np.expand_dims(testX, axis=-1)
+trainX = np.array(trainX)
+testX = np.array(testX)
+# trainX = np.expand_dims(trainX, axis=-1)
+# testX = np.expand_dims(testX, axis=-1)
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
 
@@ -88,18 +91,15 @@ for i in queryIdxs:
     #loop over the results
     for (d,j) in results:
         #grab the result image, convert back to the range [0,225], then update the images list
-        image = (trainX[j] * 225).astype('uint8')
-        image = np.dstack([image] * 3)
+        image = (trainX[j] * 255).astype('uint8')
+        # image = image[:,:1] * 3
+        # print(image.shape)
+        image = np.dstack([image])
         images.append(image)
 
     #display the query image
-    # query = (testX[i] * 225).astype('uint8')
-    # im = Image.open(query)
-    # Image._show(im)
-    # plt.imshow(query)
-    # plt.gray()
-    # plt.show()
-    # cv2.imshow("Query", query)
+    query = (testX[i] * 255).astype('uint8')
+    cv2.imshow("Query", query)
 
     
 
