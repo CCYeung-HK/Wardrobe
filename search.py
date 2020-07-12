@@ -64,6 +64,9 @@ testX = np.array(testX)
 # testX = np.expand_dims(testX, axis=-1)
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
+print(trainX[0])
+print(type(trainX[0]))
+print(trainX[0].dtype)
 
 #load the autoencofer model and index from disk
 print('[INFO] loading autoencoder and index..')
@@ -92,6 +95,8 @@ for i in queryIdxs:
     for (d,j) in results:
         #grab the result image, convert back to the range [0,225], then update the images list
         image = (trainX[j] * 255).astype('uint8')
+        b,g,r = cv2.split(image)
+        image = cv2.merge([r,g,b])
         # image = image[:,:1] * 3
         # print(image.shape)
         image = np.dstack([image])
@@ -99,11 +104,13 @@ for i in queryIdxs:
 
     #display the query image
     query = (testX[i] * 255).astype('uint8')
+    b,g,r = cv2.split(query)
+    query = cv2.merge([r,g,b])
     cv2.imshow("Query", query)
 
     
 
     #build a montage from the results and display it
-    montage = build_montages(images, (256,256), (10, 10))[0]
+    montage = build_montages(images, (256,256), (5, 5))[0]
     cv2.imshow('Results', montage)
     cv2.waitKey(0)
