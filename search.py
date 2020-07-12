@@ -64,9 +64,6 @@ testX = np.array(testX)
 # testX = np.expand_dims(testX, axis=-1)
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
-print(trainX[0])
-print(type(trainX[0]))
-print(trainX[0].dtype)
 
 #load the autoencofer model and index from disk
 print('[INFO] loading autoencoder and index..')

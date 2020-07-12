@@ -28,7 +28,7 @@ for image in tops:
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
 #add a channel dimension to every image in the training split, then scale the pixel intensities to the range [0,1]
-trainX = np.expand_dims(trainX, axis=-1)
+trainX = np.array(trainX)
 trainX = trainX.astype('float32') / 255.0
 
 #load our autoencoder from disk

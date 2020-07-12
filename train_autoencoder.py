@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import cv2
+import tensorflow as tf
 
 from PIL import Image
 from sklearn.model_selection import train_test_split
@@ -50,9 +51,9 @@ args = vars(ap.parse_args())
 
 #PREPARE TO TRAIN THE AUTOENCODER
 #initialise the number of epochs to train for, initial learning rate and batch size
-EPOCHS = 50
+EPOCHS = 16
 INIT_LR = 1e-3
-BS = 32
+BS = 16
 #epochs = cycle through the full training set
 #INIT_LR = learning rate (initial)
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
@@ -67,15 +68,16 @@ for image in tops:
     im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
-print(tops_image_uint8[0])
-print(tops_image_uint8[0].dtype)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range [0,1]
-trainX = np.expand_dims(trainX, axis=-1)
-testX = np.expand_dims(testX, axis=-1)
+# trainX = np.expand_dims(trainX, axis=-1)
+# testX = np.expand_dims(testX, axis=-1)
 #expand the shape of an array, axis -> position in the epanded axes where the new axis is placed
 #then convert to float32 array
+#Note!!!! WE DONT NEED TO EXPAND AS ITS AREADY 256x256x3#
+trainX = np.array(trainX)
+testX = np.array(testX)
 trainX = trainX.astype('float32') / 255.0
 testX = testX.astype('float32') / 255.0
 
