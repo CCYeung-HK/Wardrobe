@@ -13,6 +13,8 @@ from PIL import Image
 from sklearn.model_selection import train_test_split
 import os
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 # def visualize_predictions(decoded, gt, samples=10):
 #     #initialize our list of output samples
 #     outputs = None
@@ -51,9 +53,9 @@ args = vars(ap.parse_args())
 
 #PREPARE TO TRAIN THE AUTOENCODER
 #initialise the number of epochs to train for, initial learning rate and batch size
-EPOCHS = 16
+EPOCHS = 20
 INIT_LR = 1e-3
-BS = 16
+BS = 32
 #epochs = cycle through the full training set
 #INIT_LR = learning rate (initial)
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
