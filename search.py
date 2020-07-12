@@ -2,10 +2,16 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.datasets import mnist
 from imutils import build_montages
+from sklearn.model_selection import train_test_split
+from PIL import Image
+
+
 import numpy as np
 import argparse
 import pickle
 import cv2
+import os
+
 
 def euclidean(a, b):
     #compile and return the euclidean distance between two vectors
@@ -39,8 +45,15 @@ ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queri
 args=vars(ap.parse_args())
 
 #load the MNIST dataset
-print('[INFO] loading MNIST DATASET')
-((trainX, _), (testX, _)) = mnist.load_data()
+print('[INFO] loading tops images')
+tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
+tops_image_uint8 = []
+for image in tops:
+    im = Image.open(image)
+    im_resized = im.resize((252, 252), Image.ANTIALIAS)
+    im_uint8 = np.array(im_resized)
+    tops_image_uint8.append(im_uint8)
+trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
 trainX = np.expand_dims(trainX, axis=-1)
