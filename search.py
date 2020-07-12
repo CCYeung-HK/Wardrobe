@@ -93,12 +93,17 @@ for i in queryIdxs:
         images.append(image)
 
     #display the query image
-    query = (testX[i] * 225).astype('uint8')
-    cv2.imshow("Query", query)
+    # query = (testX[i] * 225).astype('uint8')
+    # im = Image.open(query)
+    # Image._show(im)
+    # plt.imshow(query)
+    # plt.gray()
+    # plt.show()
+    # cv2.imshow("Query", query)
 
     
 
     #build a montage from the results and display it
-    # montage = build_montages(images, (252, 252), (10, 10))[0]
-    # cv2.imshow('Results', montage)
-    # cv2.waitKey(0)
+    montage = build_montages(images, (256,256), (10, 10))[0]
+    cv2.imshow('Results', montage)
+    cv2.waitKey(0)
