@@ -64,7 +64,7 @@ tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not ima
 tops_image_uint8 = []
 for image in tops:
     im = Image.open(image)
-    im_resized = im.resize((252, 252), Image.ANTIALIAS)
+    im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
 print(tops_image_uint8[0])
@@ -82,7 +82,7 @@ testX = testX.astype('float32') / 255.0
 #construct our convolutional autoencoder
 print('[INFO] building autoencoder')
 #build(width, height, depth)
-autoencoder = ConvAutoencoder.build(252, 252, 3)
+autoencoder = ConvAutoencoder.build(256, 256, 3)
 opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 autoencoder.compile(loss='mse', optimizer=opt)
 
@@ -103,14 +103,14 @@ plt.figure(figsize=(20, 4))
 for i in range(n):
     # display original
     ax = plt.subplot(2, n, i + 1)
-    plt.imshow(testX[i].reshape(252, 252, 3))
+    plt.imshow(testX[i].reshape(256, 256, 3))
     plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 
     # display reconstruction
     ax = plt.subplot(2, n, i + 1 + n)
-    plt.imshow(decoded[i].reshape(252, 252, 3))
+    plt.imshow(decoded[i].reshape(256, 256, 3))
     plt.gray()
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)

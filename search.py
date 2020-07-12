@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from PIL import Image
 
 
+import matplotlib.pyplot as plt
 import numpy as np
 import argparse
 import pickle
@@ -50,7 +51,7 @@ tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not ima
 tops_image_uint8 = []
 for image in tops:
     im = Image.open(image)
-    im_resized = im.resize((252, 252), Image.ANTIALIAS)
+    im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
@@ -73,8 +74,6 @@ encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded
 print('[INFO] encoding testing images')
 features = encoder.predict(testX)
 
-
-
 #randomly sample a set of testing query image indexes
 queryIdxs = list(range(0, testX.shape[0]))
 queryIdxs = np.random.choice(queryIdxs, size=args['sample'], replace=False)
@@ -95,8 +94,11 @@ for i in queryIdxs:
 
     #display the query image
     query = (testX[i] * 225).astype('uint8')
+    cv2.imshow("Query", query)
+
+    
 
     #build a montage from the results and display it
-    montage = build_montages(images, (28, 28), (15, 15))[0]
-    cv2.imshow('Results', montage)
-    cv2.waitKey(0)
+    # montage = build_montages(images, (252, 252), (10, 10))[0]
+    # cv2.imshow('Results', montage)
+    # cv2.waitKey(0)

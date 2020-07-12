@@ -22,11 +22,9 @@ tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not ima
 tops_image_uint8 = []
 for image in tops:
     im = Image.open(image)
-    im_resized = im.resize((252, 252), Image.ANTIALIAS)
+    im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
-print(tops_image_uint8[0])
-print(tops_image_uint8[0].dtype)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
 #add a channel dimension to every image in the training split, then scale the pixel intensities to the range [0,1]
