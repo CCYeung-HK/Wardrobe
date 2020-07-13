@@ -38,46 +38,46 @@ def perform_search(queryFeatures, index, maxResults=64):
 
 
 #PROBABY WILL DELETE THIS as we can assign it in the code instead (we know the path anyway)
-ap = argparse.ArgumentParser()
+# ap = argparse.ArgumentParser()
 # ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
 # ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
 #index of features to search through (i.e. the serialized index)
-ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queries to perform')
+# ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queries to perform')
 #number of testing queries to perfrom with a default of 10
-args=vars(ap.parse_args())
+# args=vars(ap.parse_args())
 
+def search(query):
 #load the MNIST dataset
-print('[INFO] loading tops images')
-tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
-tops_image_uint8 = []
-for image in tops:
-    im = Image.open(image)
-    im_resized = im.resize((256, 256), Image.ANTIALIAS)
-    im_uint8 = np.array(im_resized)
-    tops_image_uint8.append(im_uint8)
-tops_indexes = [*range(len(tops))]
-trainX, testX, trainY, testY = train_test_split(tops_image_uint8, tops_indexes, train_size = 0.8, test_size = 0.2, random_state=6)
+    print('[INFO] loading tops images')
+    tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
+    tops_image_uint8 = []
+    for image in tops:
+        im = Image.open(image)
+        im_resized = im.resize((256, 256), Image.ANTIALIAS)
+        im_uint8 = np.array(im_resized)
+        tops_image_uint8.append(im_uint8)
+    tops_indexes = [*range(len(tops))]
+    trainX, testX, trainY, testY = train_test_split(tops_image_uint8, tops_indexes, train_size = 0.8, test_size = 0.2, random_state=6)
 
 
-#add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
-trainX = np.array(trainX)
-testX = np.array(testX)
-# trainX = np.expand_dims(trainX, axis=-1)
-# testX = np.expand_dims(testX, axis=-1)
-trainX = trainX.astype('float32') / 255.0
-testX = testX.astype('float32') / 255.0
+    #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
+    trainX = np.array(trainX)
+    testX = np.array(testX)
+    # trainX = np.expand_dims(trainX, axis=-1)
+    # testX = np.expand_dims(testX, axis=-1)
+    trainX = trainX.astype('float32') / 255.0
+    testX = testX.astype('float32') / 255.0
 
-#load the autoencofer model and index from disk
-print('[INFO] loading autoencoder and index..')
-autoencoder = load_model('output/autoencoder.h5')
-index = pickle.loads(open('output/index.pickle', 'rb').read())
+    #load the autoencofer model and index from disk
+    print('[INFO] loading autoencoder and index..')
+    autoencoder = load_model('output/autoencoder.h5')
+    index = pickle.loads(open('output/index.pickle', 'rb').read())
 
-#create the encoder model which consists of *jsut* the encoder protion of the autoencoder
-encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
+    #create the encoder model which consists of *jsut* the encoder protion of the autoencoder
+    encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
 
 #quantify the contents of our input testing images using the encoder
 #CHANGE IT TO OUR INPUT IMAGE INSTEAD OF USING TESTING IMAGES
-def search(query):
     print('[INFO] encoding testing images')
     # features = encoder.predict(testX)
     # May needa convert query to uint8 here (query from index is maybe jpg)
@@ -118,10 +118,13 @@ def search(query):
     # cv2.imshow("Query", query)
 
     recommendation_index = images[0][1]
-    recommendation = Image.open(tops[recommendation_index])
-    recommendation.show()
+    # recommendation = tops[recommendation_index]
+    # recommendation = Image.open(tops[recommendation_index])
+    # recommendation.show()
 
         #build a montage from the results and display it
     # montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
     # cv2.imshow('Results', montage)
     # cv2.waitKey(0)
+
+    return recommendation_index

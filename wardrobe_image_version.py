@@ -118,7 +118,7 @@ class wardrobeApp:
 
     def get_next_top(self): 
         #Now treat it as a like button
-        #self._get_next_item(self.top_image_path, self.top_images)
+        # self._get_next_item(self.top_image_path, self.top_images)
         self.like_outfit(self.top_image_path)
 
     def get_prev_top(self):
@@ -153,7 +153,14 @@ class wardrobeApp:
         self.update_image(self.bottom_images[new_bottom_index], self.bottom_image_label)
 
     def like_outfit(self, current_item):
-        search_image.search(current_item)
+        recommendation_index = search_image.search(current_item)
+        print(current_item)
+        reco_image = self.top_images[recommendation_index]
+        self.top_image_path = reco_image
+        self.update_image(reco_image, self.top_image_label)
+        print(reco_image)
+
+        
 
 root = tk.Tk()
 app = wardrobeApp(root)
