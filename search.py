@@ -40,8 +40,8 @@ def perform_search(queryFeatures, index, maxResults=64):
 
 #PROBABY WILL DELETE THIS as we can assign it in the code instead (we know the path anyway)
 ap = argparse.ArgumentParser()
-ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
-ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
+# ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
+# ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
 #index of features to search through (i.e. the serialized index)
 ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queries to perform')
 #number of testing queries to perfrom with a default of 10
@@ -69,8 +69,8 @@ testX = testX.astype('float32') / 255.0
 
 #load the autoencofer model and index from disk
 print('[INFO] loading autoencoder and index..')
-autoencoder = load_model(args['model'])
-index = pickle.loads(open(args['index'], 'rb').read())
+autoencoder = load_model('output/autoencoder.h5')
+index = pickle.loads(open('output/index.pickle', 'rb').read())
 
 #create the encoder model which consists of *jsut* the encoder protion of the autoencoder
 encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
@@ -112,6 +112,6 @@ for i in queryIdxs:
     
 
     #build a montage from the results and display it
-    montage = build_montages(images, (256,256), (5, 5))[0]
+    montage = build_montages(images, (256,256), (10, 10))[0]
     cv2.imshow('Results', montage)
     cv2.waitKey(0)
