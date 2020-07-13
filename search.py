@@ -75,43 +75,49 @@ index = pickle.loads(open('output/index.pickle', 'rb').read())
 #create the encoder model which consists of *jsut* the encoder protion of the autoencoder
 encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
 
-#quantify tje contents of our input testing images using the encoder
+#quantify the contents of our input testing images using the encoder
 #CHANGE IT TO OUR INPUT IMAGE INSTEAD OF USING TESTING IMAGES
-print('[INFO] encoding testing images')
-features = encoder.predict(testX)
+def search(query):
+    print('[INFO] encoding testing images')
+    # features = encoder.predict(testX)
+    # May needa convert query to uint8 here (query from index is maybe jpg)
+    query = np.expand_dims(query, axis=0)
+    features = encoder.predict(query)
 
-#randomly sample a set of testing query image indexes
-#HERE CAN BE REMOVED AS INPUT QUERY WILL BE FROM USERS
-queryIdxs = list(range(0, testX.shape[0]))
-queryIdxs = np.random.choice(queryIdxs, size=args['sample'], replace=False)
+    #randomly sample a set of testing query image indexes
+    #HERE CAN BE REMOVED AS INPUT QUERY WILL BE FROM USERS
+    # queryIdxs = list(range(0, testX.shape[0]))
+    # queryIdxs = np.random.choice(queryIdxs, size=args['sample'], replace=False)
 
-#loop over the testing indexes
-for i in queryIdxs:
-    #take the features for the current image, find all similar iamges in our dataset, then initialize our list of result images
-    queryFeatures = features[i]
+    #loop over the testing indexes
+    #for i in queryIdxs:
+        #take the features for the current image, find all similar iamges in our dataset, then initialize our list of result images
+    queryFeatures = features
     results = perform_search(queryFeatures, index, maxResults=225)
     images = []
 
-    #loop over the results
+        #loop over the results
     for (d,j) in results:
         #grab the result image, convert back to the range [0,225], then update the images list
         image = (trainX[j] * 255).astype('uint8')
         b,g,r = cv2.split(image)
         image = cv2.merge([r,g,b])
-        # image = image[:,:1] * 3
-        # print(image.shape)
         image = np.dstack([image])
         images.append(image)
 
-    #display the query image
-    query = (testX[i] * 255).astype('uint8')
+        #display the query image
+    query = (query * 255).astype('uint8')
+    query = np.squeeze(query, axis=0)
     b,g,r = cv2.split(query)
     query = cv2.merge([r,g,b])
     cv2.imshow("Query", query)
 
-    
+        
 
-    #build a montage from the results and display it
+        #build a montage from the results and display it
     montage = build_montages(images, (256,256), (10, 10))[0]
     cv2.imshow('Results', montage)
     cv2.waitKey(0)
+
+
+search(testX[0])
