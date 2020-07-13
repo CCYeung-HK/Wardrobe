@@ -3,6 +3,8 @@ import random
 
 import tkinter as tk
 from PIL import Image, ImageTk
+import numpy as np
+import search_image
 
 
 WINDOW_TITLE = 'wardorbe'
@@ -115,7 +117,9 @@ class wardrobeApp:
         image_label.image = tk_photo
 
     def get_next_top(self): 
-        self._get_next_item(self.top_image_path, self.top_images)
+        #Now treat it as a like button
+        #self._get_next_item(self.top_image_path, self.top_images)
+        self.like_outfit(self.top_image_path)
 
     def get_prev_top(self):
         self._get_next_item(self.top_image_path, self.top_images, increment=False)
@@ -148,8 +152,8 @@ class wardrobeApp:
         self.update_image(self.top_images[new_top_index], self.top_image_label)
         self.update_image(self.bottom_images[new_bottom_index], self.bottom_image_label)
 
-    
-
+    def like_outfit(self, current_item):
+        search_image.search(current_item)
 
 root = tk.Tk()
 app = wardrobeApp(root)

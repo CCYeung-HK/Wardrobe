@@ -81,6 +81,10 @@ def search(query):
     print('[INFO] encoding testing images')
     # features = encoder.predict(testX)
     # May needa convert query to uint8 here (query from index is maybe jpg)
+    # query = Image.open(query)
+    # query_resized = query.resize((256, 256), Image.ANTIALIAS)
+    # query_uint8 = np.array(query_resized) 
+    # query = query_uint8.astype('float32') / 255.0
     query = np.expand_dims(query, axis=0)
     features = encoder.predict(query)
 
@@ -104,20 +108,21 @@ def search(query):
         image = cv2.merge([r,g,b])
         image = np.dstack([image])
         images.append(image)
+    
+    print(images[0])
 
         #display the query image
-    query = (query * 255).astype('uint8')
-    query = np.squeeze(query, axis=0)
-    b,g,r = cv2.split(query)
-    query = cv2.merge([r,g,b])
-    cv2.imshow("Query", query)
+    # query = (query * 255).astype('uint8')
+    # query = np.squeeze(query, axis=0)
+    # b,g,r = cv2.split(query)
+    # query = cv2.merge([r,g,b])
+    # cv2.imshow("Query", query)
 
         
 
-        #build a montage from the results and display it
-    montage = build_montages(images, (256,256), (10, 10))[0]
-    cv2.imshow('Results', montage)
-    cv2.waitKey(0)
-
+    #     #build a montage from the results and display it
+    # montage = build_montages(images, (256,256), (10, 10))[0]
+    # cv2.imshow('Results', montage)
+    # cv2.waitKey(0)
 
 search(testX[0])
