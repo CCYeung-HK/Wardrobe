@@ -152,6 +152,8 @@ class wardrobeApp:
         self.update_image(self.top_images[new_top_index], self.top_image_label)
         self.update_image(self.bottom_images[new_bottom_index], self.bottom_image_label)
 
+        search_image.clear_previous_search_data()
+
     def like_outfit(self, current_item):
         recommendation_index = search_image.search(current_item)
         # print(current_item)
