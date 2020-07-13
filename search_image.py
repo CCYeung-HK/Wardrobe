@@ -36,15 +36,10 @@ def perform_search(queryFeatures, index, maxResults=64):
     #return the list of results
     return results
 
+appeared_image = []
 
-#PROBABY WILL DELETE THIS as we can assign it in the code instead (we know the path anyway)
-# ap = argparse.ArgumentParser()
-# ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
-# ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
-#index of features to search through (i.e. the serialized index)
-# ap.add_argument('-s', '--sample', type=int, default=10, help='# of testing queries to perform')
-#number of testing queries to perfrom with a default of 10
-# args=vars(ap.parse_args())
+def clear_previous_search_data():
+    appeared_image = []
 
 def search(query):
 #load the MNIST dataset
@@ -63,8 +58,6 @@ def search(query):
     #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
     trainX = np.array(trainX)
     testX = np.array(testX)
-    # trainX = np.expand_dims(trainX, axis=-1)
-    # testX = np.expand_dims(testX, axis=-1)
     trainX = trainX.astype('float32') / 255.0
     testX = testX.astype('float32') / 255.0
 
@@ -79,29 +72,23 @@ def search(query):
 #quantify the contents of our input testing images using the encoder
 #CHANGE IT TO OUR INPUT IMAGE INSTEAD OF USING TESTING IMAGES
     print('[INFO] encoding testing images')
-    # features = encoder.predict(testX)
     # May needa convert query to uint8 here (query from index is maybe jpg)
     # Converting to uint8 (will be needed when implement)
-    query = Image.open(query)
-    query_resized = query.resize((256, 256), Image.ANTIALIAS)
+    query_image = Image.open(query)
+    query_resized = query_image.resize((256, 256), Image.ANTIALIAS)
     query_uint8 = np.array(query_resized) 
-    query = query_uint8.astype('float32') / 255.0
-    query = np.expand_dims(query, axis=0)
-    features = encoder.predict(query)
-
-    #randomly sample a set of testing query image indexes
-    #HERE CAN BE REMOVED AS INPUT QUERY WILL BE FROM USERS
-    # queryIdxs = list(range(0, testX.shape[0]))
-    # queryIdxs = np.random.choice(queryIdxs, size=args['sample'], replace=False)
+    query_float32 = query_uint8.astype('float32') / 255.0
+    query_expanded = np.expand_dims(query_float32, axis=0)
+    features = encoder.predict(query_expanded)
 
     #loop over the testing indexes
     #for i in queryIdxs:
-        #take the features for the current image, find all similar iamges in our dataset, then initialize our list of result images
+    #take the features for the current image, find all similar iamges in our dataset, then initialize our list of result images
     queryFeatures = features
     results = perform_search(queryFeatures, index, maxResults=225)
     images = []
 
-        #loop over the results
+    #loop over the results
     for (d,j) in results:
         #grab the result image, convert back to the range [0,225], then update the images list
         image = [(trainX[j] * 255).astype('uint8'), trainY[j]]
@@ -110,21 +97,36 @@ def search(query):
         image[0] = np.dstack([image[0]])
         images.append(image)
 
-        #display the query image
-    # query = (query * 255).astype('uint8')
-    # query = np.squeeze(query, axis=0)
-    # b,g,r = cv2.split(query)
-    # query = cv2.merge([r,g,b])
-    # cv2.imshow("Query", query)
+    # FOR TESTING PURPOSE
+    #display the query image
+    # query_uint8_2 = (query_expanded * 255).astype('uint8')
+    # query_squeeze = np.squeeze(query_uint8_2, axis=0)
+    # b,g,r = cv2.split(query_squeeze)
+    # query_squeeze = cv2.merge([r,g,b])
+    # cv2.imshow("Query", query_squeeze)
 
-    recommendation_index = images[0][1]
-    # recommendation = tops[recommendation_index]
+    if query in appeared_image:
+        pass
+    else:
+        appeared_image.append(query)
+    
+    images_indexes = [i[1] for i in images]
+
+    for index in range(len(images_indexes)):
+        print(index)
+        if tops[images_indexes[index]] in appeared_image:
+            pass
+        else:
+            appeared_image.append(tops[images_indexes[index]])
+            print(appeared_image)
+            return images_indexes[index]
+
+    # FOR TESTING USE
     # recommendation = Image.open(tops[recommendation_index])
     # recommendation.show()
-
-        #build a montage from the results and display it
+    # print(query)
+    # print(recommendation_index)
+        # build a montage from the results and display it
     # montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
     # cv2.imshow('Results', montage)
-    # cv2.waitKey(0)
-
-    return recommendation_index
+    # cv2.waitKey(0) 

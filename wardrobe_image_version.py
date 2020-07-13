@@ -154,11 +154,11 @@ class wardrobeApp:
 
     def like_outfit(self, current_item):
         recommendation_index = search_image.search(current_item)
-        print(current_item)
+        # print(current_item)
         reco_image = self.top_images[recommendation_index]
         self.top_image_path = reco_image
         self.update_image(reco_image, self.top_image_label)
-        print(reco_image)
+        # print(reco_image)
 
         
 
