@@ -12,7 +12,6 @@ import argparse
 import pickle
 import cv2
 import os
-import pandas as pd
 
 def euclidean(a, b):
     #compile and return the euclidean distance between two vectors
@@ -83,10 +82,10 @@ def search(query):
     # features = encoder.predict(testX)
     # May needa convert query to uint8 here (query from index is maybe jpg)
     # Converting to uint8 (will be needed when implement)
-    # query = Image.open(query)
-    # query_resized = query.resize((256, 256), Image.ANTIALIAS)
-    # query_uint8 = np.array(query_resized) 
-    # query = query_uint8.astype('float32') / 255.0
+    query = Image.open(query)
+    query_resized = query.resize((256, 256), Image.ANTIALIAS)
+    query_uint8 = np.array(query_resized) 
+    query = query_uint8.astype('float32') / 255.0
     query = np.expand_dims(query, axis=0)
     features = encoder.predict(query)
 
@@ -112,17 +111,17 @@ def search(query):
         images.append(image)
 
         #display the query image
-    query = (query * 255).astype('uint8')
-    query = np.squeeze(query, axis=0)
-    b,g,r = cv2.split(query)
-    query = cv2.merge([r,g,b])
-    cv2.imshow("Query", query)
+    # query = (query * 255).astype('uint8')
+    # query = np.squeeze(query, axis=0)
+    # b,g,r = cv2.split(query)
+    # query = cv2.merge([r,g,b])
+    # cv2.imshow("Query", query)
 
     recommendation_index = images[0][1]
     recommendation = Image.open(tops[recommendation_index])
     recommendation.show()
 
         #build a montage from the results and display it
-    montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
-    cv2.imshow('Results', montage)
-    cv2.waitKey(0)
+    # montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
+    # cv2.imshow('Results', montage)
+    # cv2.waitKey(0)
