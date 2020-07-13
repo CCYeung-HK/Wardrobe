@@ -53,9 +53,9 @@ args = vars(ap.parse_args())
 
 #PREPARE TO TRAIN THE AUTOENCODER
 #initialise the number of epochs to train for, initial learning rate and batch size
-EPOCHS = 20
+EPOCHS = 18
 INIT_LR = 1e-3
-BS = 32
+BS = 20
 #epochs = cycle through the full training set
 #INIT_LR = learning rate (initial)
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)

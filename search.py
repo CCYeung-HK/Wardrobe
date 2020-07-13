@@ -37,6 +37,8 @@ def perform_search(queryFeatures, index, maxResults=64):
     #return the list of results
     return results
 
+
+#PROBABY WILL DELETE THIS as we can assign it in the code instead (we know the path anyway)
 ap = argparse.ArgumentParser()
 ap.add_argument('-m', '--model', type=str, required=True, help='path to trained autoencoder')
 ap.add_argument('-i', '--index', type=str, required=True, help='path to features index file')
@@ -74,10 +76,12 @@ index = pickle.loads(open(args['index'], 'rb').read())
 encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
 
 #quantify tje contents of our input testing images using the encoder
+#CHANGE IT TO OUR INPUT IMAGE INSTEAD OF USING TESTING IMAGES
 print('[INFO] encoding testing images')
 features = encoder.predict(testX)
 
 #randomly sample a set of testing query image indexes
+#HERE CAN BE REMOVED AS INPUT QUERY WILL BE FROM USERS
 queryIdxs = list(range(0, testX.shape[0]))
 queryIdxs = np.random.choice(queryIdxs, size=args['sample'], replace=False)
 
