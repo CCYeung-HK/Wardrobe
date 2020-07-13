@@ -12,7 +12,7 @@ import argparse
 import pickle
 import cv2
 import os
-
+import pandas as pd
 
 def euclidean(a, b):
     #compile and return the euclidean distance between two vectors
@@ -56,7 +56,8 @@ for image in tops:
     im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
-trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
+tops_indexes = [*range(len(tops))]
+trainX, testX, trainY, testY = train_test_split(tops_image_uint8, tops_indexes, train_size = 0.8, test_size = 0.2, random_state=6)
 
 
 #add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
@@ -81,6 +82,7 @@ def search(query):
     print('[INFO] encoding testing images')
     # features = encoder.predict(testX)
     # May needa convert query to uint8 here (query from index is maybe jpg)
+    # Converting to uint8 (will be needed when implement)
     # query = Image.open(query)
     # query_resized = query.resize((256, 256), Image.ANTIALIAS)
     # query_uint8 = np.array(query_resized) 
@@ -103,26 +105,24 @@ def search(query):
         #loop over the results
     for (d,j) in results:
         #grab the result image, convert back to the range [0,225], then update the images list
-        image = (trainX[j] * 255).astype('uint8')
-        b,g,r = cv2.split(image)
-        image = cv2.merge([r,g,b])
-        image = np.dstack([image])
+        image = [(trainX[j] * 255).astype('uint8'), trainY[j]]
+        b,g,r = cv2.split(image[0])
+        image[0] = cv2.merge([r,g,b])
+        image[0] = np.dstack([image[0]])
         images.append(image)
-    
-    print(images[0])
 
         #display the query image
-    # query = (query * 255).astype('uint8')
-    # query = np.squeeze(query, axis=0)
-    # b,g,r = cv2.split(query)
-    # query = cv2.merge([r,g,b])
-    # cv2.imshow("Query", query)
+    query = (query * 255).astype('uint8')
+    query = np.squeeze(query, axis=0)
+    b,g,r = cv2.split(query)
+    query = cv2.merge([r,g,b])
+    cv2.imshow("Query", query)
 
-        
+    recommendation_index = images[0][1]
+    recommendation = Image.open(tops[recommendation_index])
+    recommendation.show()
 
-    #     #build a montage from the results and display it
-    # montage = build_montages(images, (256,256), (10, 10))[0]
-    # cv2.imshow('Results', montage)
-    # cv2.waitKey(0)
-
-search(testX[0])
+        #build a montage from the results and display it
+    montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
+    cv2.imshow('Results', montage)
+    cv2.waitKey(0)
