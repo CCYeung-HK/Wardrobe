@@ -79,6 +79,7 @@ def webscraping_bottoms(urls):
     #     sleep(randint(2,5))
     #     download_image(image_info[i], i)
 
+#This is for scraping and DOWNLOAD the images (NOT RECOMMENDED as it will load the website with a lot of request)
 # def webscraping_bottom(url):
 
 #     req = requests.get(url , headers={'User-Agent': 'Mozilla/5.0'})
@@ -118,4 +119,5 @@ urls_bottoms = [
     'https://www2.hm.com/en_gb/men/shop-by-product/jeans.html?product-type=men_jeans&sort=stock&image-size=small&image=model&offset=0&page-size=82'
     ]
 
+#both functions would work but remember to add the links from H.M. you like to perform scraping (and also change csv directory if you want to create new directory instead)
 webscraping_bottoms(urls_bottoms)
