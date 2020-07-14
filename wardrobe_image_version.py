@@ -63,48 +63,6 @@ class wardrobeApp:
         top_next_button = tk.Button(self.tops_frame, text='Love it', command=self.get_similar_outfit)
         top_next_button.pack(side=tk.RIGHT)
 
-        # bottom_prev_button = tk.Button(self.bottom_frame, text='Prev', command = self.get_prev_bottom)
-        # bottom_prev_button.pack(side=tk.LEFT)
-
-        # bottom_next_button = tk.Button(self.bottom_frame, text='Next', command=self.get_next_bottom)
-        # bottom_next_button.pack(side=tk.RIGHT)
-
-        #create outfit button
-        # create_outfit_button = tk.Button(self.bottom_frame, text='Create Outfit', command=self.create_outfit)
-        # create_outfit_button.pack(side=tk.LEFT)
-
-
-    #general fcn that will allow us to move front and back
-    # def _get_next_item(self, current_item, category, increment = True):
-    #     #if we know where the current item index is in a category, then we find the pic before and after it
-    #     item_index = category.index(current_item)
-    #     final_index = len(category) - 1
-    #     next_index = 0
-
-    #     if increment and item_index == final_index:
-    #         #add the end, and need to up, cycle back to beginning
-    #         next_index = 0
-    #     elif not increment and item_index == 0:
-    #         #cycle back to end
-    #         next_index = final_index
-    #     else:
-    #         #regular up and down
-    #         #based on increment
-    #         increment = 1 if increment else -1
-    #         next_index = item_index + increment
-        
-    #     next_image = category[next_index]
-
-    #     # reset update the image based on next_image path
-    #     if current_item in self.top_images:
-    #         image_label = self.top_image_label
-    #         self.top_image_path = next_image
-    #     else:
-    #         image_label = self.bottom_image_label
-    #         self.bottom_image_path = next_image
-
-    #     #use update function to change image
-    #     self.update_image(next_image, image_label)
 
     def update_image(self, new_image_path, image_label):
         #collect and change image into tk photo obj
@@ -117,19 +75,9 @@ class wardrobeApp:
 
         image_label.image = tk_photo
 
-    def get_similar_outfit(self): 
-        #Now treat it as a like button
-        # self._get_next_item(self.top_image_path, self.top_images)
+    def get_similar_outfit(self):
+        #call the search engine function 
         self.like_outfit(self.top_image_path, self.bottom_image_path)
-
-    # def get_prev_top(self):
-    #     self._get_next_item(self.top_image_path, self.top_images, increment=False)
-
-    # def get_next_bottom(self): 
-    #     self._get_next_item(self.bottom_image_path, self.bottom_images)
-
-    # def get_prev_bottom(self):
-        # self._get_next_item(self.bottom_image_path, self.bottom_images, increment=False)
 
     def create_photo(self, image_path, frame):
         #get PIL image
@@ -156,16 +104,22 @@ class wardrobeApp:
         self.bottom_image_path = self.bottom_images[new_bottom_index]
         print(self.top_image_path)
 
+        #clear previos search engine history if user decided to generate new random outfit
         search_image.clear_previous_search_data()
         search_image_bottoms.clear_previous_search_data()
 
     def like_outfit(self, current_item_top, current_item_bottom):
-        print(current_item_top)
+        #tops
+        #pass query to the search engine
         recommendation_index_top = search_image.search(current_item_top)
+        #find the image
         reco_image_top = self.top_images[recommendation_index_top]
+        #update the image path
         self.top_image_path = reco_image_top
+        #update the display
         self.update_image(reco_image_top, self.top_image_label)
 
+        #same as above but for bottoms
         recommendation_index_bottoms = search_image_bottoms.search(current_item_bottom)
         reco_image_bottom = self.bottom_images[recommendation_index_bottoms]
         self.bottom_image_path = reco_image_bottom
