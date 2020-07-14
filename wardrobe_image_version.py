@@ -1,3 +1,6 @@
+#Reference
+#TheComeUpCode, WardrobeApp, https://github.com/TheComeUpCode/WardrobeApp.git
+
 import os
 import random
 
@@ -102,7 +105,6 @@ class wardrobeApp:
         self.top_image_path = self.top_images[new_top_index]
         self.update_image(self.bottom_images[new_bottom_index], self.bottom_image_label)
         self.bottom_image_path = self.bottom_images[new_bottom_index]
-        print(self.top_image_path)
 
         #clear previos search engine history if user decided to generate new random outfit
         search_image.clear_previous_search_data()

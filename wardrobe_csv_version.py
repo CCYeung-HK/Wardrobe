@@ -1,3 +1,6 @@
+#Reference
+#TheComeUpCode, WardrobeApp, https://github.com/TheComeUpCode/WardrobeApp.git
+
 #For reading the csv which extracts images from the web in real time when requested 
 #instead of requiring to download all the images for the code
 #ONLY in random wardrobe version (NO ML)

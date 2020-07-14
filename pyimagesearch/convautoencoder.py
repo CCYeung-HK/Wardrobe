@@ -1,3 +1,6 @@
+#Reference
+#Adrian Rosebrock, Autoencoders for Content-based Image Retrieval with Keras and TensorFlow, PyImageSearch, https://www.pyimagesearch.com/2020/03/30/autoencoders-for-content-based-image-retrieval-with-keras-and-tensorflow/, accessed on 14 July 2020
+
 # import the necessary packages
 from tensorflow.keras.layers import BatchNormalization
 from tensorflow.keras.layers import Conv2D
@@ -14,7 +17,7 @@ import numpy as np
 
 class ConvAutoencoder:
 	@staticmethod
-	def build(width, height, depth, filters=(32, 64), latentDim=16):
+	def build(width, height, depth, filters=(32, 64), latentDim=12):
 		# initialize the input shape to be "channels last" along with
 		# the channels dimension itself
 		# channels dimension itself

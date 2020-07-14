@@ -1,3 +1,6 @@
+#Reference
+#Adrian Rosebrock, Autoencoders for Content-based Image Retrieval with Keras and TensorFlow, PyImageSearch, https://www.pyimagesearch.com/2020/03/30/autoencoders-for-content-based-image-retrieval-with-keras-and-tensorflow/, accessed on 14 July 2020
+
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.datasets import mnist
