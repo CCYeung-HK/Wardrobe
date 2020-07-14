@@ -6,6 +6,7 @@ A wardrobe to generate random outfit ideas and provides suggestions based on you
 ## Current Version
 
 Only worked on Man's clothing. Will scrape more data from woman's section later and develop and woman wardrobe as well.
+Still optimising the model
 
 ## Prerequistes
 

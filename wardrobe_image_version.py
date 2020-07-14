@@ -60,10 +60,10 @@ class wardrobeApp:
     def create_buttons(self):
         #creating prev/next buttons
         #(master widget (frames), command = function to be called)
-        top_prev_button = tk.Button(self.tops_frame, text='Give me some ideas', command = self.create_outfit)
+        top_prev_button = tk.Button(self.bottom_frame, text='Give me some ideas', command = self.create_outfit)
         top_prev_button.pack(side=tk.LEFT)
 
-        top_next_button = tk.Button(self.tops_frame, text='Love it', command=self.get_similar_outfit)
+        top_next_button = tk.Button(self.bottom_frame, text='Love it', command=self.get_similar_outfit)
         top_next_button.pack(side=tk.RIGHT)
 
 
