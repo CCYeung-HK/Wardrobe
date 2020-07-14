@@ -36,13 +36,15 @@ def perform_search(queryFeatures, index, maxResults=64):
     #return the list of results
     return results
 
+#To ensure same suggestions would not come up when users consecutively like the outfit 
 appeared_image = []
 
+#Clear the above restrictions when users generate new random oufit
 def clear_previous_search_data():
     appeared_image.clear()
 
 
-#load the MNIST dataset
+#load the bottoms dataset, same conversion as train_autoencoder
 print('[INFO] loading bottoms images')
 bottoms = [str('bottoms/') + imagefile for imagefile in os.listdir('bottoms/') if not imagefile.startswith('.')]
 bottoms_image_uint8 = []
@@ -51,11 +53,11 @@ for image in bottoms:
     im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     bottoms_image_uint8.append(im_uint8)
+#using labels for finding the image at later stage
 bottoms_indexes = [*range(len(bottoms))]
 trainX, testX, trainY, testY = train_test_split(bottoms_image_uint8, bottoms_indexes, train_size = 0.8, test_size = 0.2, random_state=6)
 
 
-#add a channel dimension to every image in the dataset, then scale the pixel intensities to the range[0,1]
 trainX = np.array(trainX)
 testX = np.array(testX)
 trainX = trainX.astype('float32') / 255.0
@@ -70,11 +72,9 @@ index = pickle.loads(open('output/index_bottoms.pickle', 'rb').read())
 encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
 
 def search(query):
-#quantify the contents of our input testing images using the encoder
-#CHANGE IT TO OUR INPUT IMAGE INSTEAD OF USING TESTING IMAGES
+    #quantify the contents of our input image using the encoder
     print('[INFO] encoding testing images')
-    # May needa convert query to uint8 here (query from index is maybe jpg)
-    # Converting to uint8 (will be needed when implement)
+    #converting format of the query from the app from jpg to uint8 and float32
     query_image = Image.open(query)
     query_resized = query_image.resize((256, 256), Image.ANTIALIAS)
     query_uint8 = np.array(query_resized) 
@@ -96,14 +96,7 @@ def search(query):
         image[0] = np.dstack([image[0]])
         images.append(image)
 
-    # FOR TESTING PURPOSE
-    #display the query image
-    # query_uint8_2 = (query_expanded * 255).astype('uint8')
-    # query_squeeze = np.squeeze(query_uint8_2, axis=0)
-    # b,g,r = cv2.split(query_squeeze)
-    # query_squeeze = cv2.merge([r,g,b])
-    # cv2.imshow("Query", query_squeeze)
-
+    #Ensure same outfit would not come up
     if query in appeared_image:
         pass
     else:
@@ -117,13 +110,3 @@ def search(query):
         else:
             appeared_image.append(bottoms[images_indexes[i]])
             return images_indexes[i]
-
-    # FOR TESTING USE
-    # recommendation = Image.open(bottoms[recommendation_index])
-    # recommendation.show()
-    # print(query)
-    # print(recommendation_index)
-        # build a montage from the results and display it
-    # montage = build_montages((row[0] for row in images), (256,256), (10, 10))[0]
-    # cv2.imshow('Results', montage)
-    # cv2.waitKey(0) 
