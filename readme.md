@@ -3,6 +3,8 @@
 A wardrobe to generate random outfit ideas and provides suggestions based on your previous preference.
 (current data scraped from H.M using BeautifulSoup)
 
+![Screenshot1](/screenshots/Capture1.PNG) ![Screenshot2](/screenshots/Capture2.PNG) ![Screenshot3](/screenshots/Capture3.PNG)
+
 ## Current Version
 
 Only worked on Man's clothing. Will scrape more data from woman's section later and develop and woman wardrobe as well.
