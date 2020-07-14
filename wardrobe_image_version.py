@@ -60,18 +60,18 @@ class wardrobeApp:
         top_prev_button = tk.Button(self.tops_frame, text='Prev', command = self.get_prev_top)
         top_prev_button.pack(side=tk.LEFT)
 
-        top_next_button = tk.Button(self.tops_frame, text='Next', command=self.get_next_top)
+        top_next_button = tk.Button(self.tops_frame, text='Love it', command=self.get_next_top)
         top_next_button.pack(side=tk.RIGHT)
 
-        bottom_prev_button = tk.Button(self.bottom_frame, text='Prev', command = self.get_prev_bottom)
-        bottom_prev_button.pack(side=tk.LEFT)
+        # bottom_prev_button = tk.Button(self.bottom_frame, text='Prev', command = self.get_prev_bottom)
+        # bottom_prev_button.pack(side=tk.LEFT)
 
-        bottom_next_button = tk.Button(self.bottom_frame, text='Next', command=self.get_next_bottom)
-        bottom_next_button.pack(side=tk.RIGHT)
+        # bottom_next_button = tk.Button(self.bottom_frame, text='Next', command=self.get_next_bottom)
+        # bottom_next_button.pack(side=tk.RIGHT)
 
         #create outfit button
-        create_outfit_button = tk.Button(self.bottom_frame, text='Create Outfit', command=self.create_outfit)
-        create_outfit_button.pack(side=tk.LEFT)
+        # create_outfit_button = tk.Button(self.bottom_frame, text='Create Outfit', command=self.create_outfit)
+        # create_outfit_button.pack(side=tk.LEFT)
 
 
     #general fcn that will allow us to move front and back
