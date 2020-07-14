@@ -112,12 +112,11 @@ def search(query):
     images_indexes = [i[1] for i in images]
 
     for i in range(len(images_indexes)):
-        print(i)
         if tops[images_indexes[i]] in appeared_image:
             pass
         else:
             appeared_image.append(tops[images_indexes[i]])
-            print(appeared_image)
+            print(query)
             return images_indexes[i]
 
     # FOR TESTING USE

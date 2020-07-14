@@ -63,8 +63,8 @@ testX = testX.astype('float32') / 255.0
 
 #load the autoencofer model and index from disk
 print('[INFO] loading autoencoder and index..')
-autoencoder = load_model('output/autoencoder.h5')
-index = pickle.loads(open('output/index.pickle', 'rb').read())
+autoencoder = load_model('output/autoencoder_bottoms.h5')
+index = pickle.loads(open('output/index_bottoms.pickle', 'rb').read())
 
 #create the encoder model which consists of *jsut* the encoder protion of the autoencoder
 encoder = Model(inputs=autoencoder.input, outputs=autoencoder.get_layer('encoded').output)
@@ -112,12 +112,10 @@ def search(query):
     images_indexes = [i[1] for i in images]
 
     for i in range(len(images_indexes)):
-        print(i)
         if bottoms[images_indexes[i]] in appeared_image:
             pass
         else:
             appeared_image.append(bottoms[images_indexes[i]])
-            print(appeared_image)
             return images_indexes[i]
 
     # FOR TESTING USE
