@@ -15,8 +15,7 @@ ap.add_argument('-m', '--model', type=str, required=True, help='path to trained 
 ap.add_argument('-i', '--index', type=str, required=True, help='path to output features index file')
 args=vars(ap.parse_args())
 
-#load the MMIST dataset
-#WE NEEDA CHANGE THIS
+#loading the top images, same as format conversion from train_encoder
 print('[INFO] loading tops images')
 tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
 tops_image_uint8 = []
@@ -27,7 +26,7 @@ for image in tops:
     tops_image_uint8.append(im_uint8)
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
-#add a channel dimension to every image in the training split, then scale the pixel intensities to the range [0,1]
+
 trainX = np.array(trainX)
 trainX = trainX.astype('float32') / 255.0
 
@@ -43,10 +42,10 @@ encoder = Model(inputs=autoencoder.input,
 print('[INFO] encoding images...')
 features = encoder.predict(trainX)
 
-#construct a dictionary that maps the index of the MNIST training
+#construct a dictionary that maps the index of the training
 #image to its correspinding latent-space representation
 indexies = list(range(0, trainX.shape[0]))
-#indexies = integer indicies of each MNIST digit image in the dataset
+#indexies = integer indicies of each image in the dataset
 #features = the corresponding feature vetor for each image in the dataset
 data = {'indexies': indexies, 'features': features}
 

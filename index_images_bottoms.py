@@ -15,8 +15,7 @@ ap.add_argument('-m', '--model', type=str, required=True, help='path to trained 
 ap.add_argument('-i', '--index', type=str, required=True, help='path to output features index file')
 args=vars(ap.parse_args())
 
-#load the MMIST dataset
-#WE NEEDA CHANGE THIS
+#loading the bottoms images, same as format conversion from train_encoder
 print('[INFO] loading bottoms images')
 bottoms = [str('bottoms/') + imagefile for imagefile in os.listdir('bottoms/') if not imagefile.startswith('.')]
 bottoms_image_uint8 = []
@@ -43,10 +42,10 @@ encoder = Model(inputs=autoencoder.input,
 print('[INFO] encoding images...')
 features = encoder.predict(trainX)
 
-#construct a dictionary that maps the index of the MNIST training
+#construct a dictionary that maps the index of the training
 #image to its correspinding latent-space representation
 indexies = list(range(0, trainX.shape[0]))
-#indexies = integer indicies of each MNIST digit image in the dataset
+#indexies = integer indicies of each image in the dataset
 #features = the corresponding feature vetor for each image in the dataset
 data = {'indexies': indexies, 'features': features}
 
