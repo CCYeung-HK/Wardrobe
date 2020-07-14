@@ -3,7 +3,7 @@
 A wardrobe to generate random outfit ideas and provides suggestions based on your previous preference.
 (current data scraped from H.M using BeautifulSoup)
 
-![Screenshot1](/screenshots/Capture1.PNG) ![Screenshot2](/screenshots/Capture2.PNG) ![Screenshot3](/screenshots/Capture3.PNG)
+![Screenshot1](/screenshots/Capture1.PNG)![Screenshot2](/screenshots/Capture2.PNG)![Screenshot3](/screenshots/Capture3.PNG)
 
 ## Current Version
 
