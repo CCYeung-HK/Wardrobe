@@ -1,3 +1,4 @@
+#training autoencoder for bottoms images
 #set the matplotlib nbackend so figures can be saved in background
 import matplotlib
 from pyimagesearch.convautoencoder_bottoms import ConvAutoencoder
@@ -36,8 +37,8 @@ BS = 20
 #INIT_LR = learning rate (initial)
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
 
-#load the MNISR dataset
-#HERE TO MODIFY AS THE IMAGE DATA
+#load the bottoms images data
+#converting images from jpg format to uint8 for the encoder
 print('[INFO] loading tops images')
 bottoms = [str('bottoms/') + imagefile for imagefile in os.listdir('bottoms/') if not imagefile.startswith('.')]
 bottoms_image_uint8 = []
@@ -46,14 +47,11 @@ for image in bottoms:
     im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     bottoms_image_uint8.append(im_uint8)
+#Split the dataset for training and testing purpose
 trainX, testX = train_test_split(bottoms_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
-#add a channel dimension to every image in the dataset, then scale the pixel intensities to the range [0,1]
-# trainX = np.expand_dims(trainX, axis=-1)
-# testX = np.expand_dims(testX, axis=-1)
-#expand the shape of an array, axis -> position in the epanded axes where the new axis is placed
 #then convert to float32 array
-#Note!!!! WE DONT NEED TO EXPAND AS ITS AREADY 256x256x3#
+#We don't need to add another channel dimension as the MNIST data did since its already has 3 channel dimensions
 trainX = np.array(trainX)
 testX = np.array(testX)
 trainX = trainX.astype('float32') / 255.0
@@ -78,6 +76,7 @@ H = autoencoder.fit(
 print('[INFO] making predictions...')
 decoded = autoencoder.predict(testX)
 
+#For visualising the convolutional results
 n = 10  # how many digits we will display
 plt.figure(figsize=(20, 4))
 for i in range(n):

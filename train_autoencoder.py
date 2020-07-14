@@ -1,3 +1,4 @@
+#training autoencoder for tops images
 #set the matplotlib nbackend so figures can be saved in background
 import matplotlib
 from pyimagesearch.convautoencoder import ConvAutoencoder
@@ -14,30 +15,6 @@ from sklearn.model_selection import train_test_split
 import os
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
-# def visualize_predictions(decoded, gt, samples=10):
-#     #initialize our list of output samples
-#     outputs = None
-
-#     #loop over our number of output samples
-#     #original vs decoded
-#     for i in range(0, samples):
-#         original = (gt[i] * 225).astype('uint8')
-#         recon = (decoded[i] * 225).astype('uint8')
-
-#     #stack the original image and reconstructed image side-by-side
-#     output = np.hstack([original, recon])
-
-#     #if the outside array is empty, initialise it as the current side-by-side image display
-#     if outputs is None:
-#         outputs = output
-
-#     #otherwise, vertically stack the outputs
-#     else:
-#         outputs = np.vstack([outputs, output])
-
-#     #return the output images
-#     return outputs
 
 #construct the argument parse and parse the arguments
 #adding commandline arguments
@@ -60,8 +37,8 @@ BS = 20
 #INIT_LR = learning rate (initial)
 #BS = Batch size = number of training samples in one forward pass (<= number of samples ind train set)
 
-#load the MNISR dataset
-#HERE TO MODIFY AS THE IMAGE DATA
+#load the tops images data
+#converting images from jpg format to uint8 for the encoder
 print('[INFO] loading tops images')
 tops = [str('tops/') + imagefile for imagefile in os.listdir('tops/') if not imagefile.startswith('.')]
 tops_image_uint8 = []
@@ -70,14 +47,11 @@ for image in tops:
     im_resized = im.resize((256, 256), Image.ANTIALIAS)
     im_uint8 = np.array(im_resized)
     tops_image_uint8.append(im_uint8)
+#Split the dataset for training and testing purpose
 trainX, testX = train_test_split(tops_image_uint8, train_size = 0.8, test_size = 0.2, random_state=6)
 
-#add a channel dimension to every image in the dataset, then scale the pixel intensities to the range [0,1]
-# trainX = np.expand_dims(trainX, axis=-1)
-# testX = np.expand_dims(testX, axis=-1)
-#expand the shape of an array, axis -> position in the epanded axes where the new axis is placed
 #then convert to float32 array
-#Note!!!! WE DONT NEED TO EXPAND AS ITS AREADY 256x256x3#
+#We don't need to add another channel dimension as the MNIST data did since its already has 3 channel dimensions
 trainX = np.array(trainX)
 testX = np.array(testX)
 trainX = trainX.astype('float32') / 255.0
@@ -102,6 +76,7 @@ H = autoencoder.fit(
 print('[INFO] making predictions...')
 decoded = autoencoder.predict(testX)
 
+#For visualising the convolutional results
 n = 10  # how many digits we will display
 plt.figure(figsize=(20, 4))
 for i in range(n):
@@ -119,9 +94,6 @@ for i in range(n):
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
 plt.show()
-
-# vis = visualize_predictions(decoded, testX)
-# cv2.imwrite(args['vis'], vis)
 
 #construct a plot that plots and saves the training history
 N= np.arange(0, EPOCHS)
