@@ -80,8 +80,10 @@ The neural network used here is autoencoder which is used commonly in image reco
 
 ## Future outlook
 
-The project is still far from perfect. First thing to be improved would be the features of the images. The training loss and validation loss could be further optimised to return a better trained model. 
+The project is still far from perfect. First thing to be improved would be the features of the images. The training loss and validation loss could be further optimised to return a better trained model and importing external test dataset. 
+
 Also, instead of the current suggestions which compute both the tops and bottoms individually, the training model can be trained with combined images and respective score to allow a better representation of the outfit display (i.e. adding labels to the training data). In addition, the engine should be able to further rank the outfit with the feedback from the users to improve the existing trained model. 
+
 Lastly, presentation could be improved by displaying a web page by maybe using React instead of displaying with the python standard library tkinker. 
 
 ## Acknowledgements
